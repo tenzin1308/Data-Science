@@ -1,0 +1,126 @@
+#### Exercise 1.1 #### 
+
+## Question a: reading csv file
+```{r}
+setwd("/Users/tenzintashi/Downloads/CSc 460 - DS/Assignment")
+
+# file <- file.choose()
+# college <- read.csv(file)
+college <- read.csv('Dataset/College.csv')
+```
+
+## Question b: View data set
+```{r}
+View(college)
+```
+
+```{r}
+rownames(college) <- college[, 1]
+View(college)
+```
+
+
+```{r}
+# removing the fist column in the data where the name are stored
+college <- college[,-1]
+View(college)
+```
+
+## Question c:
+```{r}
+# getting the summary
+summary(college)
+```
+
+```{r}
+# Use pairs() to produce a scatterplot matrix
+college[,1] = as.numeric(factor(college[,1]))
+pairs(college[, 1:10])
+```
+
+```{r}
+# plot side by side boxplots of Outstate vs Private 
+plot(college$Private, college$Outstate)
+```
+
+```{r}
+# create a new qualitative variable
+Elite <- rep("No", nrow(college))
+Elite[college$Top10perc > 50] <- "Yes"
+Elite <- as.factor(Elite)
+college <- data.frame(college, Elite)
+
+summary(college$Elite)
+```
+
+```{r}
+# plot side by side boxplots of Outstate vs Elite
+plot(college$Elite, college$Outstate, main = "Plot of Outstate vs. Elite", xlab = "Elite", ylab = "Outstate")
+```
+
+```{r}
+par(mfrow = c(2,2))
+hist(college$Books)
+hist(college$Outstate)
+hist(college$Apps)
+hist(college$Enroll)
+```
+
+#### Exercise 1.2 #### 
+
+```{r}
+Auto <- read.csv('Dataset/Auto.csv', header = T, na.strings = "?")
+Auto <- na.omit(Auto)
+```
+
+```{r}
+summary(Auto)
+```
+
+```{r}
+head(Auto)
+```
+## a. Which of the predictors are quantitative, and which are qualitative?
+```{r}
+# The quantitative variables are cylinders, origin, and name
+# and the rest are the qualitative.
+qualitative_columns <- c(2, 8, 9)
+```
+
+## b. What is the range of each quantitative predictor? You can answer this using the range() function.
+```{r}
+sapply(Auto[, -qualitative_columns], range)
+```
+## c. What is the mean and standard deviation of each quantitative predictor?
+```{r}
+sapply(Auto[, -qualitative_columns], mean)
+sapply(Auto[, -qualitative_columns], sd)
+```
+## d. Now remove the 10th through 85th observations. What is the range, mean, and standard deviation
+## of each predictor in the subset of the data that remains?
+```{r}
+sapply(Auto[-seq(10, 85), -qualitative_columns], mean)
+```
+
+## e. Using the full data set, investigate the predictors graphically, using scatterplots or other tools of
+## your choice. Create some plots highlighting the relationships among the predictors. Comment on
+## your findings.
+```{r}
+pairs(Auto[, -qualitative_columns])
+```
+```{r}
+plot(Auto$year, Auto$mpg)
+```
+
+
+## f. Suppose that we wish to predict gas mileage (mpg) on the basis of the other variables. Do your plots
+## suggest that any of the other variables might be useful in predicting mpg? Justify your answer.
+```{r}
+# Lets plot some mpg vs. some of our qualitative features: 
+plot(as.factor(Auto$cylinders), Auto$mpg)
+```
+
+```{r}
+
+plot(as.factor(Auto$origin), Auto$mpg)
+```
